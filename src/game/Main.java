@@ -28,7 +28,7 @@ public class Main {
             "border", "radius", "format", "source", "branch", "toggle", "signal", "static", "public", "export"
     };
     public static void main(String[] args){
-
+        printMenu();
     }
 
     public static void printMenu(){
@@ -41,6 +41,6 @@ public class Main {
     }
 
     public static String getRandomWord(){
-        return words[ran.nextInt(200)];
+        return words[ran.nextInt(190)];
     }
 }
