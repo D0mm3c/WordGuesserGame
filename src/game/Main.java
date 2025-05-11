@@ -1,10 +1,20 @@
 package game;
+
 import java.util.Scanner;
 import java.util.Random;
 
 public class Main {
     static Scanner sc = new Scanner(System.in);
     static Random ran = new Random();
+
+    static int attempts = 5;
+
+    static boolean run = true;
+    static boolean guessing = true;
+
+    static String secretLetter = "_";
+    static String guess;
+
     static String word = "";
     static String solution;
     static String[] words = {"apple", "banana", "cherry", "grape", "lemon", "melon", "peach", "plum", "berry", "orange",
@@ -27,20 +37,63 @@ public class Main {
             "script", "engine", "widget", "option", "editor", "viewer", "viewer", "canvas", "layout", "margin",
             "border", "radius", "format", "source", "branch", "toggle", "signal", "static", "public", "export"
     };
-    public static void main(String[] args){
-        printMenu();
+
+    public static void main(String[] args) {
+
+        do {
+            attempts = 5;
+            guessing = true;
+            System.out.println("Welcome to the Word Guesser Game!");
+            makeRandomWord();
+            printMenu();
+
+            while (guessing && attempts > 0) {
+                guess = sc.nextLine().toLowerCase();
+                if (guess.equals("0")) {
+                    run = false;
+                    guessing = false;
+                    System.out.println("Goodbye :)");
+                } else if (guess.equals(solution) || word.equals(solution)) {
+                    System.out.println("Congratulations, you guessed correct!");
+                    guessing = false;
+                } else {
+                    attempts--;
+                    for (int i = 0; i < guess.length(); i++) {
+                        for(int j = 0; j < solution.length(); j++) {
+                            if (guess.charAt(i) == solution.charAt(j)) {
+                                word = replaceChar(word, solution.charAt(j), j);
+                            }
+                        }
+                    }
+                    printMenu();
+                }
+            }
+
+            System.out.println("Do you want to play another round? (Y/N)");
+            guess = sc.nextLine().toLowerCase();
+            if (guess.equals("n")) {
+                System.out.println("Goodbye :)");
+                run = false;
+            }
+
+        } while (run);
     }
 
-    public static void printMenu(){
-        System.out.println("Welcome to the Word Guesser Game!");
-        System.out.println(getRandomWord());
+    public static void printMenu() {
+
+        System.out.println("You have " + attempts + " attempts to guess the secret word: " + word);
+        System.out.println("To guess just type the word. If you want to end type '0'");
+
+
+        //System.out.println("Correct Word: " + solution);
     }
 
-    public static void initWord(){
-
+    public static void makeRandomWord() {
+        solution = words[ran.nextInt(190)];
+        word = secretLetter.repeat(solution.length());
     }
 
-    public static String getRandomWord(){
-        return words[ran.nextInt(190)];
+    public static String replaceChar(String str, char ch, int index) {
+        return str.substring(0, index) + ch + str.substring(index + 1);
     }
 }
