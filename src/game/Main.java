@@ -9,14 +9,14 @@ public class Main {
 
     static int attempts = 5;
 
-    static boolean run = true;
-    static boolean guessing = true;
+    static boolean run = true; //not ended
+    static boolean guessing = true; //word not guessed
 
     static String secretLetter = "_";
-    static String guess;
+    static String guess; //current chosen word
 
-    static String word = "";
-    static String solution;
+    static String word = ""; //secret word, will be printed, has these hidden letters
+    static String solution; //solution lol
     static String[] words = {"apple", "banana", "cherry", "grape", "lemon", "melon", "peach", "plum", "berry", "orange",
             "forest", "bridge", "stream", "rocket", "planet", "silver", "dragon", "sunset", "sunrise", "flavor",
             "school", "pencil", "eraser", "binder", "lesson", "window", "mirror", "closet", "tunnel", "button",
@@ -44,11 +44,17 @@ public class Main {
             attempts = 5;
             guessing = true;
             System.out.println("Welcome to the Word Guesser Game!");
-            makeRandomWord();
-            printMenu();
+
+            //make random word
+            solution = words[ran.nextInt(190)];
+            word = secretLetter.repeat(solution.length());
+
 
             while (guessing && attempts > 0) {
-                guess = sc.nextLine().toLowerCase();
+                //print menu
+                System.out.println("You have " + attempts + " attempts to guess the secret word: " + word);
+                System.out.println("To guess just type the word. If you want to end type '0'");
+                guess = sc.nextLine().toLowerCase().substring(0, solution.length());
                 if (guess.equals("0")) {
                     run = false;
                     guessing = false;
@@ -59,13 +65,13 @@ public class Main {
                 } else {
                     attempts--;
                     for (int i = 0; i < guess.length(); i++) {
-                        for(int j = 0; j < solution.length(); j++) {
+                        for (int j = 0; j < solution.length(); j++) {
                             if (guess.charAt(i) == solution.charAt(j)) {
                                 word = replaceChar(word, solution.charAt(j), j);
                             }
                         }
                     }
-                    printMenu();
+                    //print menu
                 }
             }
 
@@ -77,20 +83,6 @@ public class Main {
             }
 
         } while (run);
-    }
-
-    public static void printMenu() {
-
-        System.out.println("You have " + attempts + " attempts to guess the secret word: " + word);
-        System.out.println("To guess just type the word. If you want to end type '0'");
-
-
-        //System.out.println("Correct Word: " + solution);
-    }
-
-    public static void makeRandomWord() {
-        solution = words[ran.nextInt(190)];
-        word = secretLetter.repeat(solution.length());
     }
 
     public static String replaceChar(String str, char ch, int index) {
